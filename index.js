@@ -124,7 +124,7 @@ class PDFDocumentWithTables extends PDFDocument {
         };
 
         // add a new page before create table
-        if (options.addPage === true || startY > this.page.height - this.page.margins.bottom) {
+        if (options.addPage === true) {
           this.addPage();
           startY = this.page.margins.top;
           rowBottomY = 0;
@@ -145,9 +145,6 @@ class PDFDocumentWithTables extends PDFDocument {
           rowBottomY = 0;
           addHeader();
         }
-
-        // add fire
-        this.on("pageAdded", onFirePageAdded);
 
         // warning - eval can be harmful
         const fEval = (str) => {
@@ -487,8 +484,16 @@ class PDFDocumentWithTables extends PDFDocument {
 
         };
 
+        if (startY > this.page.height - this.page.margins.bottom) {
+          this.addPage();
+          startY = this.page.margins.top;
+          rowBottomY = 0;
+        }
+
         // End header
         addHeader();
+        // add fire
+        this.on("pageAdded", onFirePageAdded);
 
         // Datas
         table.datas.forEach((row, i) => {
