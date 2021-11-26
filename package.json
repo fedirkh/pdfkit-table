@@ -16,8 +16,7 @@
     "pdf",
     "pdfkit",
     "table",
-    "pdfkit table",
-    "pdfkit-table"
+    "pdfkit table"
   ],
   "license": "MIT",
   "bugs": {
@@ -25,6 +24,6 @@
   },
   "homepage": "https://github.com/natancabral/pdfkit-table#readme",
   "dependencies": {
-    "pdfkit": "latest"
+    "pdfkit": "^0.13.0"
   }
 }
