@@ -2,16 +2,21 @@
 // "use strict";
 // https://jshint.com/
 
+// TODO: remove
 const PDFDocument = require("pdfkit");
 
 class PDFDocumentWithTables extends PDFDocument {
-
-  constructor(option) {
-    super(option);
+  constructor(doc, options = {log: false}) {
+    // TODO: remove
+    super()
+    Object.assign(this, doc)
+    this._options = options
   }
 
   logg(...args) {
-    // console.log(args);
+    if (this._options?.log === true) {
+      console.log(args);
+    }
   }
 
   /**
@@ -47,12 +52,8 @@ class PDFDocumentWithTables extends PDFDocument {
    * table
    * @param {Object} table
    * @param {Object} options
-   * @param {Function} callback
    */
-  table(table, options, callback) {
-    return new Promise((resolve, reject) => {
-      try {
-
+  table(table, options) {
         typeof table === 'string' && (table = JSON.parse(table));
 
         table || (table = {});
@@ -726,48 +727,22 @@ class PDFDocumentWithTables extends PDFDocument {
 
         // add fire
         this.off("pageAdded", onFirePageAdded);
-
-        // callback
-        typeof callback === 'function' && callback(this);
-
-        // nice :)
-        resolve();
-
-      } catch (error) {
-
-        // error
-        reject(error);
-
-      }
-
-    });
   }
 
-    /**
+  /**
    * tables
    * @param {Object} tables
-   * @returns
+   * @returns Promise
    */
-  async tables(tables, callback) {
-    return new Promise((resolve, reject) => {
-      try {
-
-        // if tables is Array
-        Array.isArray(tables) ?
-        // for each on Array
-        tables.forEach( async table => await this.table( table, table.options || {} ) ) :
-        // else is tables is a unique table object
-        ( typeof tables === 'object' ? this.table( tables, tables.options || {} ) : null ) ;
-        // callback
-        typeof callback === 'function' && callback(this);
-
-      } catch (error) {
-        reject(error);
+  tables(tables) {
+      if (Array.isArray(tables)) {
+        tables.forEach( table => this.table( table, table.options || {} ) )
+      } else if (typeof tables === 'object') {
+        this.table( tables, tables.options || {} )
+      } else {
+        throw new Error(`tables is in not supported format`)
       }
-
-    });
-  }
-
+    }
 }
 
 module.exports = PDFDocumentWithTables;
