@@ -1,18 +1,8 @@
-// jshint esversion: 6
-// "use strict";
-// https://jshint.com/
+'use strict'
 
-// TODO: remove
 const PDFDocument = require("pdfkit");
 
 class PDFDocumentWithTables extends PDFDocument {
-  constructor(doc, options = {log: false}) {
-    // TODO: remove
-    super()
-    Object.assign(this, doc)
-    this._options = options
-  }
-
   logg(...args) {
     if (this._options?.log === true) {
       console.log(args);
@@ -26,7 +16,7 @@ class PDFDocumentWithTables extends PDFDocument {
    * @param {Number} fillOpacity
    * @param {Function} callback
    */
-  addBackground ({x, y, width, height}, fillColor, fillOpacity, callback) {
+  addBackground ({x, y, width, height}, fillColor, fillOpacity) {
 
     // validate
     fillColor ?? (fillColor = 'grey');
@@ -44,8 +34,6 @@ class PDFDocumentWithTables extends PDFDocument {
 
     // back to saved style
     this.restore();
-
-    typeof callback === 'function' && callback(this);
   }
 
   /**
@@ -595,7 +583,7 @@ class PDFDocumentWithTables extends PDFDocument {
             width: width - (cellPadding.left + cellPadding.right),
             align: align,
           });
-          // line height, spacing hehight, cell and text diference
+          // line height, spacing height, cell and text difference
           topTextToAlignVertically = rowDistance - columnSpacing + (rectCell.height - heightText) / 2;
         }
         // ------------------------------------------------------------------------------
@@ -725,7 +713,7 @@ class PDFDocumentWithTables extends PDFDocument {
     this.y = rowBottomY; // position y final;
     this.moveDown(); // break
 
-    // add fire
+    // remove fire
     this.off("pageAdded", onFirePageAdded);
   }
 

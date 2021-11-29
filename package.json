@@ -23,7 +23,7 @@
     "url": "https://github.com/natancabral/pdfkit-table/issues"
   },
   "homepage": "https://github.com/natancabral/pdfkit-table#readme",
-  "peerDependencies": {
+  "dependencies": {
     "pdfkit": "^0.13.0"
   }
 }
