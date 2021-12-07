@@ -72,7 +72,7 @@ class PDFDocumentWithTables extends PDFDocument {
     const prepareRow       = options.prepareRow || ((row, indexColumn, indexRow, rectRow) => this.fillColor('black').font("Helvetica").fontSize(8).fill());
 
       let tableWidth       = 0;
-    const maxY             = this.page.height - (this.page.margins.top + this.page.margins.bottom);
+    const maxY             = this.page.height - this.page.margins.bottom;
 
       let startX           = options.x || this.x || this.page.margins.left;
       let startY           = options.y || this.y || this.page.margins.top;
@@ -478,10 +478,10 @@ class PDFDocumentWithTables extends PDFDocument {
     if (!options.allowHeaderTableSplit) {
       const datasFirstRowHeight = table.datas?.[0] ? computeRowHeight(table.datas[0]) : 0;
       const rowsFirstRowHeight = table.rows?.[0] ? computeRowHeight(table.rows[0]) : 0;
-      requiredSpace += datasFirstRowHeight || rowsFirstRowHeight;
+      requiredSpace += (datasFirstRowHeight || rowsFirstRowHeight) * 2;
     }
 
-    if (startY > this.page.height - this.page.margins.bottom - requiredSpace) {
+    if (startY + requiredSpace >= maxY) {
       this.addPage();
       startY = this.page.margins.top;
       rowBottomY = 0;
