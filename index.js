@@ -14,7 +14,6 @@ class PDFDocumentWithTables extends PDFDocument {
    * @param {Object} rect
    * @param {String} fillColor
    * @param {Number} fillOpacity
-   * @param {Function} callback
    */
   addBackground ({x, y, width, height}, fillColor, fillOpacity) {
 
@@ -56,6 +55,7 @@ class PDFDocumentWithTables extends PDFDocument {
     options.columnsSize || (options.columnsSize = []);
     options.addPage || (options.addPage = false);
     options.absolutePosition || (options.absolutePosition = false);
+    options.allowHeaderTableSplit ?? (options.allowHeaderTableSplit = true);
 
     const title            = table.title    ? table.title    : ( options.title    || '' ) ;
     const subtitle         = table.subtitle ? table.subtitle : ( options.subtitle || '' ) ;
@@ -473,7 +473,15 @@ class PDFDocumentWithTables extends PDFDocument {
 
     };
 
-    if (startY > this.page.height - this.page.margins.bottom) {
+    let requiredSpace = computeRowHeight(table.headers);
+
+    if (!options.allowHeaderTableSplit) {
+      const datasFirstRowHeight = table.datas?.[0] ? computeRowHeight(table.datas[0]) : 0;
+      const rowsFirstRowHeight = table.rows?.[0] ? computeRowHeight(table.rows[0]) : 0;
+      requiredSpace += datasFirstRowHeight || rowsFirstRowHeight;
+    }
+
+    if (startY > this.page.height - this.page.margins.bottom - requiredSpace) {
       this.addPage();
       startY = this.page.margins.top;
       rowBottomY = 0;
