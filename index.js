@@ -108,7 +108,7 @@ class PDFDocumentWithTables extends PDFDocument {
         // else object
       } else if(typeof data === 'object' ){
         // title object
-        data.label && this.fontSize( data.fontSize || size ).text( data.label, startX, startY );
+        data.label && this.fillColor(data.color || 'black').this.fontSize(data.fontSize || size).text(data.label, startX, startY).fill()
       }
     };
 
