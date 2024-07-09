@@ -68,6 +68,8 @@ class PDFDocumentWithTables extends PDFDocument {
     const rowDistance      = 0.5;
       let cellPadding      = {top: 0, right: 0, bottom: 0, left: 0}; // universal
 
+    const prepareTitle = options.prepareTitle || (() => this.fillColor('black').font('Helvetica-Bold').fontSize(8).fill());
+
     const prepareHeader    = options.prepareHeader || (() => this.fillColor('black').font("Helvetica-Bold").fontSize(8).fill());
     const prepareRow       = options.prepareRow || ((row, indexColumn, indexRow, rectRow) => this.fillColor('black').font("Helvetica").fontSize(8).fill());
 
@@ -107,8 +109,10 @@ class PDFDocumentWithTables extends PDFDocument {
         startY = this.y + columnSpacing + 2;
         // else object
       } else if(typeof data === 'object' ){
+        prepareTitle()
         // title object
         data.label && this.fillColor(data.color || 'black').fontSize(data.fontSize || size).text(data.label, startX, startY).fill()
+        startY = this.y + columnSpacing + 2
       }
     };
 
